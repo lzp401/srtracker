@@ -1,29 +1,15 @@
-{% load staticfiles %}
+{% extends "recordlist/base.html" %}
 {% load record_extension %}
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>SR Tracker</title>
-    <link type="text/css" rel="stylesheet" href="{% static "recordlist/css/bootstrap.min.css" %}"/>
-    <link type="text/css" rel="stylesheet" href="{% static "recordlist/css/bootstrap-theme.min.css" %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script type="javascript" src="{% static "recordlist/js/bootstrap.js" %}"></script>
-    <script type="javascript" src="{% static "recordlist/js/bootstrap.js" %}"></script>
-</head>
-<body style="padding: 10px">
-    <div class="page-header">
-      <h1>SR Tracker <small>Create View</small></h1>
-    </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <a class="btn btn-default" href="{% url 'index' %}">
-            <span class="glyphicon glyphicon-th-list"></span> List View
-        </a>
-      </div>
-    </div>
+{% block title %}SR Tracker - Creation{% endblock %}
+{% block page_header %}SR Tracker <small>Create View</small>{% endblock %}
+{% block toolbar %}
+    <a class="btn btn-default" href="{% url 'index' %}">
+        <span class="glyphicon glyphicon-th-list"></span> List View
+    </a>
+{% endblock %}
 
+{% block content %}
     <form id="sr_form" action="{% url 'create' %}" method="post">
     {% csrf_token %}
     <div class="panel panel-default">
@@ -73,6 +59,4 @@
       </div>
     </div>
     </form>
-
-</body>
-</html>
+{% endblock %}
