@@ -5,55 +5,43 @@ from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator
 import datetime
-from templatetags import RecordFilter
-import constrant
+import constraint
+from support import ColumnHeader, UrlHelper
+
 
 # Create your views here.
-
-
 def index(request):
     template = loader.get_template("recordlist/index.html")
 
     list_display = ('recordId', 'srNumber', 'customer', 'openDate', 'calPriority', 'reviewRequired', 'description', )
 
     order_column = request.GET.get('col') if request.GET.has_key('col') else 'recordId'
-    order = request.GET.get('order') if request.GET.has_key('order') else constrant.DESC
-
-    records_all = Record.objects.order_by(('-' if order == constrant.DESC else '') + order_column)
+    order = request.GET.get('order') if request.GET.has_key('order') else constraint.DESC
+    records_all = Record.objects.order_by(('-' if order == constraint.DESC else '') + order_column)
 
     pagesize = request.GET.get('pagesize') if request.GET.has_key('pagesize') else 50
     page = request.GET.get('page') if request.GET.has_key('page') else 1
-
     paginator = Paginator(records_all, pagesize)
 
     records = paginator.page(page)
 
-    url_formattre = lambda querydict: '&'.join([_key + '=' + _val for _key, _val in querydict.iteritems()])
+    current_param_str = UrlHelper.format_params(request.GET)
 
-    current_url = url_formattre(request.GET)
-
-    class col_header:
-        def __init__(self, name, link):
-            self.name = name
-            self.link = link
-            self.show_caret = False
-            self.caret_style = ''
-
-        def __str__(self):
-            return self.name
-
-    column_headers = [col_header(col, RecordFilter.dump_col_url(current_url, col)) for col in list_display]
+    column_headers = [ColumnHeader(name, UrlHelper.update_params(current_param_str, col=name)) for name in list_display]
 
     for header in column_headers:
         header.show_caret = header.name == order_column
-        header.caret_style = '' if order == constrant.DESC and header.show_caret else 'dropup'
+        header.caret_style = '' if order == constraint.DESC and header.show_caret else 'dropup'
+
+        if header.show_caret:
+            header.order = constraint.DESC if order == constraint.ASC else constraint.ASC
 
     context = RequestContext(request, {
         'header_all': column_headers,
         'records': records,
         'header_no_id': list_display[1:],
         'total_count': records_all.count(),
-        'current_url': current_url,
+        'current_url': current_param_str,
     })
 
     return HttpResponse(template.render(context))

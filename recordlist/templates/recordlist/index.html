@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% load RecordFilter %}
+{% load record_extension %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -54,7 +54,7 @@
         <ul class="pagination">
         <li>
             {% if records.has_previous %}
-            <a href="{{ current_url|dump_page_url:records.previous_page_number }}" aria-label="Previous">
+            <a href="{% page_url current_url records.previous_page_number %}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
             {% endif %}
@@ -62,7 +62,7 @@
         <li><a href="#" aria-label="Current">Page {{ records.number }} of {{ records.paginator.num_pages }}</a></li>
         <li>
             {% if records.has_next %}
-              <a href="{{ current_url|dump_page_url:records.next_page_number }}" aria-label="Next">
+              <a href="{% page_url current_url records.next_page_number %}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             {% endif %}
@@ -79,7 +79,7 @@
             <th><input type="checkbox" id="select-all"></th>
             {% for header in header_all %}
             <th>
-                <a href="{{ current_url|dump_order_url:header.name }}" class="btn {{ header.caret_style }}">
+                <a href="{% sort_url current_url header.name header.order %}" class="btn {{ header.caret_style }}">
                     {{ header }}
                     {% if header.show_caret %}
                         <span class="caret"></span>
