@@ -1,0 +1,78 @@
+{% load staticfiles %}
+{% load RecordFilter %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>SR Tracker</title>
+    <link type="text/css" rel="stylesheet" href="{% static "recordlist/css/bootstrap.min.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "recordlist/css/bootstrap-theme.min.css" %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script type="javascript" src="{% static "recordlist/js/bootstrap.js" %}"></script>
+    <script type="javascript" src="{% static "recordlist/js/bootstrap.js" %}"></script>
+</head>
+<body style="padding: 10px">
+    <div class="page-header">
+      <h1>SR Tracker <small>Create View</small></h1>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <a class="btn btn-default" href="{% url 'index' %}">
+            <span class="glyphicon glyphicon-th-list"></span> List View
+        </a>
+      </div>
+    </div>
+
+    <form id="sr_form" action="{% url 'create' %}" method="post">
+    {% csrf_token %}
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3>Data for SR Tracker</h3></div>
+      <div class="panel-body">
+
+        <table class="table table-bordered">
+            <tr>
+                <th class="active" width="150">calSummary</td>
+                <td><textarea name="calSummary" style="width: 100%">{{ record.calSummary }}</textarea> </td>
+            </tr>
+            <tr>
+                <th class="active" width="150">overallStatus</td>
+                <td><input type="text" name="overallStatus" style="width: 100%" value="{{ record.overallStatus }}"></td>
+            </tr>
+            <tr>
+                <th class="active" width="150">calPriority</td>
+                <td><input type="text" name="calPriority" style="width: 100%" value="{{ record.calPriority }}"></td>
+            </tr>
+            <tr>
+                <th class="active" width="150">faultCategory</td>
+                <td><input type="text" name="faultCategory" style="width: 100%" value="{{ record.faultCategory }}"></td>
+            </tr>
+            <tr>
+                <th class="active" width="150">reviewRequired</td>
+                <td>{{ record.reviewRequired }}</td>
+            </tr>
+            <tr>
+                <th class="active" width="150">calReviewDate</td>
+                <td>{{ record.calReviewDate }}</td>
+            </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+
+        <button type="submit" class="btn btn-primary" name="create">
+          <span class="glyphicon glyphicon-ok"></span> Create
+        </button>
+
+        <a class="btn btn-default" href="{% url 'index' %}">
+          <span class="glyphicon glyphicon-remove"></span> Cancel
+        </a>
+
+      </div>
+    </div>
+    </form>
+
+</body>
+</html>

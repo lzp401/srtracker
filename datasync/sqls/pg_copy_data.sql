@@ -1,0 +1,1 @@
+COPY {0} FROM STDIN WITH delimiter '{1}' CSV
