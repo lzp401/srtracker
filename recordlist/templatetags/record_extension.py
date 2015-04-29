@@ -22,3 +22,8 @@ def page_url(param_str, page_number):
 def sort_url(param_str, column_name, order=None):
     param_str_new = UrlHelper.update_params(param_str, col=column_name, order=order)
     return UrlHelper.to_url(param_str_new)
+
+
+@register.simple_tag
+def sr_url(sr_number):
+    return 'http://internal-prod.vmware.com/casemgmt/srviewer/SRcaseDetails?srCaseNumber={0}'.format(sr_number)

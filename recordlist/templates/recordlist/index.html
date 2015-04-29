@@ -82,7 +82,11 @@
             <td><input type="checkbox" name="recordid" value="{{ record.recordId }}"></td>
             <td> <a href="{% url 'detail' record.recordId %}">{{ record.recordId }}</a> </td>
             {% for header in header_no_id %}
+                {% if header == 'srNumber' %}
+                <td><a href="{% sr_url record.srNumber %}" target="_blank">{{ record.srNumber }}</a> </td>
+                {% else %}
                 <td>{{ record|field:header }}</td>
+                {% endif %}
             {% endfor %}
         </tr>
         {% endfor %}
