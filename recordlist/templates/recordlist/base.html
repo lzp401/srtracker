@@ -5,17 +5,19 @@
     <meta charset="UTF-8">
     <title>{% block title %}SR Tracker{% endblock %}</title>
     <link type="text/css" rel="stylesheet" href="{% static "recordlist/css/bootstrap.min.css" %}"/>
-    <link type="text/css" rel="stylesheet" href="{% static "recordlist/css/bootstrap-theme.min.css" %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script type="javascript" src="{% static "recordlist/js/bootstrap.js" %}"></script>
+    <link type="text/css" rel="stylesheet" href="{% static "recordlist/css/bootstrap-theme.min.css" %}"/>
+    <script type="text/javascript" src="{% static "recordlist/js/jquery-1.11.2.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "recordlist/js/bootstrap.js" %}"></script>
 </head>
+{% block script %}{% endblock %}
 <body style="padding: 10px">
     <div class="page-header">
       <h1>{% block page_header %}SR Tracker <small>List View</small>{% endblock %}</h1>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">{% block toolbar %}{% endblock %}</div>
+    <div class="panel panel-default" id="toolbar">
+      <div class="panel-heading" id="toolbar-header">{% block toolbar %}{% endblock %}</div>
+      {% block filter %}{% endblock %}
     </div>
 
     {% block content %}{% endblock %}

@@ -2,8 +2,10 @@
 {% load record_extension %}
 
 {% block title %}SR Tracker - List View{% endblock %}
-<script lang="javascript">
-    $(document).on('ready', function () {
+
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function () {
         $('#select-all').on('change', function() {
             var checked = $(this).is(':checked');
 
@@ -18,6 +20,7 @@
         });
     });
 </script>
+{% endblock %}
 
 {% block page_header %}SR Tracker <small>List View</small>{% endblock %}
 {% block toolbar %}
@@ -31,9 +34,39 @@
 
 
     <div class="btn-group align-right">
-        <button type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-filter"></span>Filter
+        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#toolbar-filter" aria-expanded="false" aria-controls="toolbar-filter">
+            <span class="glyphicon glyphicon-filter"></span>Record Filter
         </button>
+    </div>
+{% endblock %}
+
+{% block filter %}
+    <div id="toolbar-filter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="toolbar-header">
+      <div class="panel-body">
+        <form method="post" id="form-filter" action="?filter=on">
+            {% for fieldname, filtertype in filter_config.iteritems %}
+            <div class="form-group">
+                {% if filtertype == filter_type.FROM_TO %}
+                    <div class="input-group">
+                        <span class="input-group-addon">{{ fieldname }} <span class="label label-default">{{ filtertype.0 }}</span></span>
+                        <input type="text" class="form-control" placeholder="{{ fieldname }}" name="{{ fieldname }}">
+                        <span class="input-group-addon"><span class="label label-default">{{ filtertype.1 }}</span></span>
+                        <input type="text" class="form-control" placeholder="{{ fieldname }}" name="{{ fieldname }}">
+                    </div>
+                {% else %}
+                    <div class="input-group">
+                      <span class="input-group-addon">{{ fieldname }} <span class="label label-default">{{ filtertype }}</span></span>
+                      <input type="text" class="form-control" placeholder="{{ fieldname }}" name="{{ fieldname }}">
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="form-group">
+                <button type="submit" class="btn btn-info">Filter</button>
+                <button type="reset" class="btn btn-default">Clean</button>
+            </div>
+        </form>
+      </div>
     </div>
 {% endblock %}
 

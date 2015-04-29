@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Record(models.Model):
     recordId = models.AutoField(primary_key=True)
     srNumber = models.BigIntegerField(null=True)
@@ -19,7 +20,3 @@ class Record(models.Model):
     calPriority = models.IntegerField(null=True)
     faultCategory = models.TextField(null=True)
 
-
-    def markReviewed(self):
-        self.reviewRequired = False
-        self.save()

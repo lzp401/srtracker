@@ -6,7 +6,8 @@ from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator
 import datetime
 import constraint
-from support import ColumnHeader, UrlHelper
+from recordlist.constraint import FilterType
+from support import ColumnHeader, UrlHelper, RecordDescriptor
 
 
 # Create your views here.
@@ -42,6 +43,8 @@ def index(request):
         'header_no_id': list_display[1:],
         'total_count': records_all.count(),
         'current_url': current_param_str,
+        'filter_config': RecordDescriptor().descriptor,
+        'filter_type': FilterType
     })
 
     return HttpResponse(template.render(context))

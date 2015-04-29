@@ -1,3 +1,7 @@
+from recordlist.constraint import FilterType
+from recordlist.models import Record
+from django.db import models
+
 __author__ = 'victorlu'
 
 '''
@@ -50,3 +54,23 @@ class UrlHelper:
     @staticmethod
     def to_url(param_str):
         return '?{0}'.format(param_str) if len(param_str) > 0 else ''
+    
+
+class RecordDescriptor:
+
+    def __init__(self):
+        self.descriptor = {}
+
+        fields = Record._meta.get_all_field_names()
+
+        for name in fields:
+            fieldtype = type(Record._meta.get_field_by_name(name)[0])
+
+            if fieldtype is models.TextField or fieldtype is models.CharField:
+                self.descriptor[name] = FilterType.CONTAINS
+            elif fieldtype is models.IntegerField or fieldtype is models.AutoField or fieldtype is models.BigIntegerField:
+                self.descriptor[name] = FilterType.IN
+            elif fieldtype is models.DateField or fieldtype is models.DateTimeField:
+                self.descriptor[name] = FilterType.FROM_TO
+            else:
+                self.descriptor[name] = FilterType.IS
