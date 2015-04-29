@@ -7,6 +7,5 @@ CREATE TABLE IF NOT EXISTS {0}
   "openDate" date,
   "modifiedDate" date,
   "touchDate" date,
-  "closeDate" date,
-  "escalationLevel" integer
+  "closeDate" date
 )

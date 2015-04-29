@@ -6,15 +6,12 @@ SET
   "openDate" = {0}."openDate",
   "modifiedDate" = {0}."modifiedDate",
   "touchDate" = {0}."touchDate",
-  "closeDate" = {0}."closeDate",
-  "escalationLevel" = {0}."escalationLevel"
-FROM  
-  {0}
-WHERE
-  recordlist_record."srNumber" = {0}."srNumber";
+  "closeDate" = {0}."closeDate"
+FROM {0}
+WHERE recordlist_record."srNumber" = {0}."srNumber";
 
 -- Insert new rows from source database
-INSERT INTO recordlist_record("srNumber", customer, description, "openDate", "modifiedDate", "touchDate", "closeDate", "escalationLevel")
+INSERT INTO recordlist_record("srNumber", customer, description, "openDate", "modifiedDate", "touchDate", "closeDate")
 SELECT * FROM {0}
 WHERE {0}."srNumber" NOT IN (SELECT distinct "srNumber" FROM recordlist_record WHERE "srNumber" != null);
 

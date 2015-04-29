@@ -53,9 +53,9 @@ def detail(request, recordid):
     record = Record.objects.get(recordId=recordid)
 
     readonly_fields = ('recordId', 'srNumber', 'customer', 'description', 'openDate', 'modifiedDate',
-                       'touchDate', 'closeDate', 'escalationLevel')
+                       'touchDate', 'closeDate',)
     editable_fields = ('calReviewDate', 'calSummary', 'overallStatus',
-                       'calPriority', 'faultCategory', 'reviewRequired')
+                       'calPriority', 'faultCategory', 'reviewRequired', 'escalationLevel')
 
     context = RequestContext(request, {
         'record': record,
@@ -80,6 +80,7 @@ def update(request, recordid):
         record.overallStatus = request.POST['overallStatus']
         record.calPriority = request.POST['calPriority']
         record.faultCategory = request.POST['faultCategory']
+        record.escalationLevel = request.POST['escalationLevel']
 
     if action['review']:
         record.reviewRequired = False

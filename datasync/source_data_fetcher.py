@@ -27,7 +27,8 @@ def csv_import(data):
     csvfile = os.tmpfile()
     writer = csv.writer(csvfile, delimiter=srtracker_conf.csv_file_conf['delimiter'])
     writer.writerows(data)
-
+    csvfile.flush()
+    csvfile.seek(0)
     sys.stdout.write(' - Done [%fs Used]\n' % (time.time() - now))
 
     return csvfile
@@ -97,7 +98,7 @@ def main(rownum = None):
     while len(results) > 0:
 
         for row in results:
-            pgsql_insert_params.append((row[0], row[1], row[2].read(), row[3], row[4], row[5], row[6], row[7]))
+            pgsql_insert_params.append((row[0], row[1], row[2].read(), row[3], row[4], row[5], row[6]))
             rowcount += 1
             sys.stdout.write('\rDumping progress: %d/%d' % (rowcount, totalrows))
             sys.stdout.flush()
