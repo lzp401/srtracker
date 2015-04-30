@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 import datetime
 import constraint
 from recordlist.constraint import FilterType
-from support import ColumnHeader, UrlHelper, RecordDescriptor
+from support import ColumnHeader, UrlHelper, RecordDescriptor, FilterHelper
 
 
 # Create your views here.
@@ -18,7 +18,26 @@ def index(request):
 
     order_column = request.GET.get('col') if request.GET.has_key('col') else 'recordId'
     order = request.GET.get('order') if request.GET.has_key('order') else constraint.DESC
-    records_all = Record.objects.order_by(('-' if order == constraint.DESC else '') + order_column)
+
+    filter_dict = None
+
+    if request.POST.has_key('clean-filter'):
+        FilterHelper.saved_dict = None
+        filter_enabled = 'off'
+    else:
+        filter_enabled = request.GET.get('filter') if request.GET.has_key('filter') else 'off'
+
+    if filter_enabled == 'on':
+        if request.POST.has_key('save-filter'):
+            filter_dict = FilterHelper.format_filter_dict(request.POST) if filter_enabled == 'on' else None
+            FilterHelper.saved_dict = filter_dict
+        else:
+            filter_dict = FilterHelper.saved_dict
+
+    if filter_enabled == 'on' and filter_dict:
+        records_all = Record.objects.filter(**filter_dict).order_by(('-' if order == constraint.DESC else '') + order_column)
+    else:
+        records_all = Record.objects.order_by(('-' if order == constraint.DESC else '') + order_column)
 
     pagesize = request.GET.get('pagesize') if request.GET.has_key('pagesize') else 50
     page = request.GET.get('page') if request.GET.has_key('page') else 1
@@ -37,6 +56,10 @@ def index(request):
         if header.show_caret:
             header.order = constraint.DESC if order == constraint.ASC else constraint.ASC
 
+
+    if filter_dict:
+        filter_dict = FilterHelper.filter_dict_description(filter_dict)
+
     context = RequestContext(request, {
         'header_all': column_headers,
         'records': records,
@@ -44,7 +67,8 @@ def index(request):
         'total_count': records_all.count(),
         'current_url': current_param_str,
         'filter_config': RecordDescriptor().descriptor,
-        'filter_type': FilterType
+        'filter_type': FilterType,
+        'filter_detail': filter_dict
     })
 
     return HttpResponse(template.render(context))

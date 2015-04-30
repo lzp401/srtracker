@@ -1,3 +1,4 @@
+from datetime import datetime
 from recordlist.constraint import FilterType
 from recordlist.models import Record
 from django.db import models
@@ -55,6 +56,46 @@ class UrlHelper:
     def to_url(param_str):
         return '?{0}'.format(param_str) if len(param_str) > 0 else ''
     
+
+class FilterHelper:
+    saved_dict = None
+
+
+    def __init__(self):
+        pass
+
+
+    @staticmethod
+    def format_filter_dict(query_dict):
+        filter_dict = {}
+        field_descriptor = RecordDescriptor().descriptor
+
+        for key, val in query_dict.iteritems():
+            if key in field_descriptor.keys() and val:
+                filter_type = field_descriptor[key]
+
+                if filter_type == FilterType.IN:
+                    filter_dict[key + filter_type['suffix']] = val.split(',')
+                elif filter_type == FilterType.CONTAINS:
+                    filter_dict[key + filter_type['suffix']] = val
+                elif filter_type == FilterType.FROM_TO:
+                    val = query_dict.getlist(key)
+                    if len(val) > 1:
+                        filter_dict[key + filter_type[0]['suffix']] = datetime.strptime(val[0], '%m-%d-%Y').date()
+                        filter_dict[key + filter_type[1]['suffix']] = datetime.strptime(val[1], '%m-%d-%Y').date()
+                    else:
+                        filter_dict[key + filter_type[0]['suffix']] = val[0]
+                elif filter_type == FilterType.IS:
+                    filter_dict[key + filter_type['suffix']] = val.lower() == 'true'
+
+        return filter_dict
+
+
+    @staticmethod
+    def filter_dict_description(filter_dict):
+        desc = ['{0} = {1}'.format(key, val) for key, val in filter_dict.iteritems()]
+        return '; '.join(desc)
+
 
 class RecordDescriptor:
 

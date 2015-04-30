@@ -18,6 +18,11 @@
             $('#form').attr('action', '{% url 'markreview' %}');
             $('#form').submit();
         });
+
+        $('[name="clean-filter"]').click(function() {
+            $('#form-filter').attr('action', '?filter=off').submit();
+
+        });
     });
 </script>
 {% endblock %}
@@ -44,26 +49,26 @@
     <div id="toolbar-filter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="toolbar-header">
       <div class="panel-body">
         <form method="post" id="form-filter" action="?filter=on">
+            {% csrf_token %}
             {% for fieldname, filtertype in filter_config.iteritems %}
             <div class="form-group">
                 {% if filtertype == filter_type.FROM_TO %}
                     <div class="input-group">
-                        <span class="input-group-addon">{{ fieldname }} <span class="label label-default">{{ filtertype.0 }}</span></span>
+                        <span class="input-group-addon">{{ fieldname }} <span class="label label-default">{{ filtertype.0.label }}</span></span>
                         <input type="text" class="form-control" placeholder="{{ fieldname }}" name="{{ fieldname }}">
-                        <span class="input-group-addon"><span class="label label-default">{{ filtertype.1 }}</span></span>
+                        <span class="input-group-addon"><span class="label label-default">{{ filtertype.1.label }}</span></span>
                         <input type="text" class="form-control" placeholder="{{ fieldname }}" name="{{ fieldname }}">
                     </div>
                 {% else %}
                     <div class="input-group">
-                      <span class="input-group-addon">{{ fieldname }} <span class="label label-default">{{ filtertype }}</span></span>
+                      <span class="input-group-addon">{{ fieldname }} <span class="label label-default">{{ filtertype.label }}</span></span>
                       <input type="text" class="form-control" placeholder="{{ fieldname }}" name="{{ fieldname }}">
                     </div>
                 {% endif %}
             </div>
             {% endfor %}
             <div class="form-group">
-                <button type="submit" class="btn btn-info">Filter</button>
-                <button type="reset" class="btn btn-default">Clean</button>
+                <button type="submit" class="btn btn-info" name="save-filter">Filter</button>
             </div>
         </form>
       </div>
@@ -71,6 +76,9 @@
 {% endblock %}
 
 {% block content %}
+    {% if filter_detail %}
+    <div class="alert alert-info" role="alert"><strong>Filter is ON!</strong><br>{{ filter_detail }} <button type="button" class="btn btn-default" name="clean-filter">Clean</button></div>
+    {% endif %}
     <nav>
         <ul class="pagination">
         <li>
