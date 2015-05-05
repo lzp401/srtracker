@@ -13,10 +13,10 @@ class Record(models.Model):
     touchDate = models.DateField(null=True)
     closeDate = models.DateField(null=True)
     escalationLevel = models.CharField(max_length=512, null=True)
-    calReviewDate = models.DateTimeField(null=True)
+    calReviewDate = models.DateField(null=True)
     calSummary = models.TextField(null=True)
     overallStatus = models.TextField(null=True)
     reviewRequired = models.NullBooleanField(default=True, null=True)
-    calPriority = models.IntegerField(null=True)
+    calPriority = models.IntegerField(default=3)
     faultCategory = models.TextField(null=True)
 

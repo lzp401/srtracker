@@ -1,14 +1,13 @@
-from datetime import datetime
-from recordlist.constraint import FilterType
-from recordlist.models import Record
-from django.db import models
-
 __author__ = 'victorlu'
 
 '''
 A support file for views
 '''
 
+from datetime import datetime
+from recordlist.constraint import FilterType
+from recordlist.models import Record
+from django.db import models
 from django.http.request import QueryDict
 
 
@@ -55,7 +54,7 @@ class UrlHelper:
     @staticmethod
     def to_url(param_str):
         return '?{0}'.format(param_str) if len(param_str) > 0 else ''
-    
+
 
 class FilterHelper:
     saved_dict = None
@@ -115,3 +114,7 @@ class RecordDescriptor:
                 self.descriptor[name] = FilterType.FROM_TO
             else:
                 self.descriptor[name] = FilterType.IS
+
+
+def format_field(value):
+    return value if value != None else ''

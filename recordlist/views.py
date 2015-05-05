@@ -14,9 +14,9 @@ from support import ColumnHeader, UrlHelper, RecordDescriptor, FilterHelper
 def index(request):
     template = loader.get_template("recordlist/index.html")
 
-    list_display = ('recordId', 'srNumber', 'customer', 'openDate', 'calPriority', 'reviewRequired', 'description', )
+    list_display = ('srNumber', 'customer', 'openDate', 'calPriority', 'modifiedDate', 'touchDate', 'reviewRequired', 'description', )
 
-    order_column = request.GET.get('col') if request.GET.has_key('col') else 'recordId'
+    order_column = request.GET.get('col') if request.GET.has_key('col') else 'touchDate'
     order = request.GET.get('order') if request.GET.has_key('order') else constraint.DESC
 
     filter_dict = None
@@ -63,7 +63,7 @@ def index(request):
     context = RequestContext(request, {
         'header_all': column_headers,
         'records': records,
-        'header_no_id': list_display[1:],
+        'header_no_id': list_display,
         'total_count': records_all.count(),
         'current_url': current_param_str,
         'filter_config': RecordDescriptor().descriptor,
@@ -102,12 +102,11 @@ def update(request, recordid):
         'save': request.POST.has_key('save'),
     }
 
-    if action['save']:
-        record.calSummary = request.POST['calSummary']
-        record.overallStatus = request.POST['overallStatus']
-        record.calPriority = request.POST['calPriority']
-        record.faultCategory = request.POST['faultCategory']
-        record.escalationLevel = request.POST['escalationLevel']
+    record.calSummary = request.POST['calSummary']
+    record.overallStatus = request.POST['overallStatus']
+    record.calPriority = request.POST['calPriority']
+    record.faultCategory = request.POST['faultCategory']
+    record.escalationLevel = request.POST['escalationLevel']
 
     if action['review']:
         record.reviewRequired = False
@@ -117,7 +116,10 @@ def update(request, recordid):
 
     record.save()
 
-    return HttpResponseRedirect(reverse('detail', args=(record.recordId,)))
+    if action['review']:
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        return HttpResponseRedirect(reverse('detail', args=(record.recordId,)))
 
 
 def create(request):

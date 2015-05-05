@@ -23,6 +23,12 @@
             $('#form-filter').attr('action', '?filter=off').submit();
 
         });
+
+        $('tr[name="record-row"] > td').click(function() {
+            if ($(this).has('a').length == 0) {
+                window.location.href = $(this).parent().attr('data-value');
+            }
+        })
     });
 </script>
 {% endblock %}
@@ -119,14 +125,13 @@
         </tr>
 
         {% for record in records %}
-        <tr style="cursor: pointer">
+        <tr style="cursor: pointer" data-value="{% url 'detail' record.recordId %}" name="record-row">
             <td><input type="checkbox" name="recordid" value="{{ record.recordId }}"></td>
-            <td> <a href="{% url 'detail' record.recordId %}">{{ record.recordId }}</a> </td>
             {% for header in header_no_id %}
                 {% if header == 'srNumber' %}
                 <td><a href="{% sr_url record.srNumber %}" target="_blank">{{ record.srNumber }}</a> </td>
                 {% else %}
-                <td>{{ record|field:header }}</td>
+                <td>{% format_field record|field:header %}</td>
                 {% endif %}
             {% endfor %}
         </tr>

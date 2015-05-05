@@ -27,3 +27,9 @@ def sort_url(param_str, column_name, order=None):
 @register.simple_tag
 def sr_url(sr_number):
     return 'http://internal-prod.vmware.com/casemgmt/srviewer/SRcaseDetails?srCaseNumber={0}'.format(sr_number)
+
+
+@register.simple_tag
+def format_field(value):
+    import recordlist.support as support
+    return support.format_field(value)
