@@ -92,9 +92,6 @@ def dump_data(cur):
     now = time.time()
     print 'Dumping source data...'
 
-    sys.stdout.write('\rDumping progress: %d/%d' % (0, totalrows))
-    sys.stdout.flush()
-
     results = cur.fetchmany()
     rowcount = 0
     params = []

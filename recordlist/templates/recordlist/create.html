@@ -19,31 +19,31 @@
         <table class="table table-bordered">
             <tr>
                 <th class="active" width="150">calSummary</td>
-                <td><textarea name="calSummary" style="width: 100%">{{ record.calSummary }}</textarea> </td>
+                <td><textarea name="calSummary" style="width: 100%">{% format_field record.calSummary %}</textarea> </td>
             </tr>
             <tr>
                 <th class="active" width="150">overallStatus</td>
-                <td><input type="text" name="overallStatus" style="width: 100%" value="{{ record.overallStatus }}"></td>
+                <td><input type="text" name="overallStatus" style="width: 100%" value="{% format_field record.overallStatus %}"></td>
             </tr>
             <tr>
                 <th class="active" width="150">calPriority</td>
-                <td><input type="text" name="calPriority" style="width: 100%" value="{{ record.calPriority }}"></td>
+                <td><input type="text" name="calPriority" style="width: 100%" value="{% format_field record.calPriority %}"></td>
             </tr>
             <tr>
                 <th class="active" width="150">faultCategory</td>
-                <td><input type="text" name="faultCategory" style="width: 100%" value="{{ record.faultCategory }}"></td>
+                <td><input type="text" name="faultCategory" style="width: 100%" value="{% format_field record.faultCategory %}"></td>
             </tr>
             <tr>
                 <th class="active" width="150">escalationLevel</td>
-                <td><input type="text" name="faultCategory" style="width: 100%" value="{{ record.escalationLevel }}"></td>
+                <td><input type="text" name="faultCategory" style="width: 100%" value="{% format_field record.escalationLevel %}"></td>
             </tr>
             <tr>
                 <th class="active" width="150">reviewRequired</td>
-                <td>{{ record.reviewRequired }}</td>
+                <td>{% format_field record.reviewRequired %}</td>
             </tr>
             <tr>
                 <th class="active" width="150">calReviewDate</td>
-                <td>{{ record.calReviewDate }}</td>
+                <td>{% format_field record.calReviewDate %}</td>
             </tr>
         </table>
       </div>

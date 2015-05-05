@@ -11,8 +11,8 @@ FROM {0}
 WHERE recordlist_record."srNumber" = {0}."srNumber";
 
 -- Insert new rows from source database
-INSERT INTO recordlist_record("srNumber", customer, description, "openDate", "modifiedDate", "touchDate", "closeDate")
-SELECT * FROM {0}
+INSERT INTO recordlist_record("srNumber", customer, description, "openDate", "modifiedDate", "touchDate", "closeDate", "calPriority")
+SELECT *, 3 FROM {0}
 WHERE {0}."srNumber" NOT IN (SELECT distinct "srNumber" FROM recordlist_record WHERE "srNumber" != null);
 
 -- Mark updated data as review required
