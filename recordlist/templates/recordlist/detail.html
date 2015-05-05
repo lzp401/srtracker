@@ -19,7 +19,11 @@
             <tr>
                 <th class="active" width="150">{{ field }}</td>
                 {% if field == 'srNumber' %}
-                <td><a href="{% sr_url record.srNumber %}" target="_blank">{{ record.srNumber }}</a> </td>
+                <td>
+                    {% if record.srNumber %}
+                    <a href="{% sr_url record.srNumber %}" target="_blank">{{ record.srNumber }}</a>
+                    {% endif %}
+                </td>
                 {% else %}
                 <td>{% format_field record|field:field %}</td>
                 {% endif %}
