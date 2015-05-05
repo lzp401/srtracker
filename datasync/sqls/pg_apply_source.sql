@@ -21,5 +21,7 @@ SET "reviewRequired" = true
 FROM {0}
 WHERE recordlist_record."srNumber" = {0}."srNumber";
 
+INSERT INTO sync_log(sync_time, record_synced) VALUES (CURRENT_TIMESTAMP, (SELECT COUNT(*) FROM {0}));
+
 -- Delete temp table
 DROP TABLE {0};

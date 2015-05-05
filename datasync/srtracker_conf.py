@@ -8,6 +8,7 @@ sql_file_path = os.path.dirname(os.path.realpath(__file__)) + '/sqls/%s'
 pg_config = {
     'temp_table': 'source_data',
     'sql': (
+        sql_file_path % 'pg_is_firstboot.sql',
         sql_file_path % 'pg_init.sql',
         sql_file_path % 'pg_copy_data.sql',
         sql_file_path % 'pg_apply_source.sql'
