@@ -16,7 +16,9 @@ def index(request):
 
     list_display = ('srNumber', 'customer', 'openDate', 'calPriority', 'modifiedDate', 'touchDate', 'reviewRequired', 'description', )
 
+    # Get sort column from GET params if has, default is touchDate
     order_column = request.GET.get('col') if request.GET.has_key('col') else 'touchDate'
+    # Get sort order from GET params if has, default is desc
     order = request.GET.get('order') if request.GET.has_key('order') else constraint.DESC
 
     filter_dict = None
@@ -133,6 +135,7 @@ def create(request):
             overallStatus=request.POST['overallStatus'],
             calPriority=request.POST['calPriority'],
             faultCategory=request.POST['faultCategory'],
+            escalationLevel = request.POST['escalationLevel'],
             reviewRequired=True
         )
 
