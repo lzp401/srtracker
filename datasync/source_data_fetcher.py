@@ -72,8 +72,13 @@ def fetch_source(conn, firstboot=False, rownum=None):
 
     # if it is first boot, fetch all matched data from source database, else, fetch the last day's data
     if not firstboot:
+        date_fields = ('CREATEDDATE', 'LASTMODIFIEDDATE', 'GSS_LAST_TOUCH_TIME__C')
         date_str = datetime.date.strftime(datetime.date.today(), '%d-%m-%Y %H:%M:%S')
-        date_str = ' and CREATEDDATE >= TO_DATE(\'{0}\', \'dd-mm-yyyy HH24:MI:SS\') '.format(date_str)
+        date_query_str = '{0} >= TO_DATE(\'{1}\', \'dd-mm-yyyy HH24:MI:SS\')'
+        date_query = [date_query_str.format(field, date_str) for field in date_fields]
+        date_query = ' OR '.join(date_query)
+        date_str = ' AND ({0})'.format(date_query)
+        # date_str = ' and CREATEDDATE >= TO_DATE(\'{0}\', \'dd-mm-yyyy HH24:MI:SS\') '.format(date_str)
     else:
         date_str = ''
 
@@ -107,6 +112,7 @@ def dump_data(cur):
         results = cur.fetchmany()
 
     cur.close()
+    sys.stdout.write('\n')
 
     return params
 
