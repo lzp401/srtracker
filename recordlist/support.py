@@ -12,6 +12,9 @@ from django.http.request import QueryDict
 
 
 class ColumnHeader:
+    """
+    This class is used to render table header
+    """
     def __init__(self, name, link):
             self.name = name
             self.link = link
@@ -24,6 +27,9 @@ class ColumnHeader:
 
 
 class UrlHelper:
+    """
+    Handle GET params, convert query dict to URL or update a param's value
+    """
     def __init__(self):
         pass
 
