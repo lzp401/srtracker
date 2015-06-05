@@ -83,7 +83,7 @@
 
 {% block content %}
     {% if filter_detail %}
-    <div class="alert alert-info" role="alert"><strong>Filter is ON!</strong><br>{{ filter_detail }} <button type="button" class="btn btn-default" name="clean-filter">Clean</button></div>
+    <div class="alert alert-info" role="alert"><strong>Filter is ON!</strong><br>{{ filter_detail }} <button type="button" class="btn btn-default" name="clean-filter">Clear</button></div>
     {% endif %}
     <nav>
         <ul class="pagination">
@@ -125,7 +125,12 @@
         </tr>
 
         {% for record in records %}
-        <tr style="cursor: pointer" data-value="{% url 'detail' record.recordId %}" name="record-row">
+        <tr style="cursor: pointer
+            {% if record.calPriority == 1 %}
+              ; background-color: red
+            {% elif record.calPriority == 2 %}
+              ; background-color: yellow
+            {% endif %}" data-value="{% url 'detail' record.recordId %}" name="record-row">
             <td><input type="checkbox" name="recordid" value="{{ record.recordId }}"></td>
             {% for header in header_no_id %}
                 {% if header == 'srNumber' %}
@@ -147,7 +152,7 @@
         <ul class="pagination">
         <li>
             {% if records.has_previous %}
-            <a href="{{ current_url }}page={{ records.previous_page_number }}" aria-label="Previous">
+            <a href="{% page_url current_url records.previous_page_number %}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
             {% endif %}
@@ -155,7 +160,7 @@
         <li><a href="#" aria-label="Current">Page {{ records.number }} of {{ records.paginator.num_pages }}</a></li>
         <li>
             {% if records.has_next %}
-              <a href="{{ current_url }}page={{ records.next_page_number }}" aria-label="Next">
+              <a href="{% page_url current_url records.next_page_number %}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             {% endif %}

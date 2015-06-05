@@ -1,3 +1,10 @@
+-- Mark modified records as review required
+UPDATE recordlist_record
+SET "reviewRequired" = true
+FROM {0}
+WHERE recordlist_record."srNumber" = {0}."srNumber" and recordlist_record."modifiedDate" != {0}."modifiedDate";
+
+
 -- Update existing rows in record table
 UPDATE recordlist_record
 SET
@@ -13,13 +20,12 @@ WHERE recordlist_record."srNumber" = {0}."srNumber";
 -- Insert new rows from source database
 INSERT INTO recordlist_record("srNumber", customer, description, "openDate", "modifiedDate", "touchDate", "closeDate", "calPriority")
 SELECT *, 3 FROM {0}
-WHERE {0}."srNumber" NOT IN (SELECT distinct "srNumber" FROM recordlist_record WHERE "srNumber" != null);
+WHERE {0}."srNumber" NOT IN (SELECT distinct "srNumber" FROM recordlist_record WHERE "srNumber" IS NOT NULL);
 
--- Mark updated data as review required
+-- Mark new data as review required
 UPDATE recordlist_record
 SET "reviewRequired" = true
-FROM {0}
-WHERE recordlist_record."srNumber" = {0}."srNumber";
+WHERE recordlist_record."reviewRequired" IS NULL;
 
 INSERT INTO sync_log(sync_time, record_synced) VALUES (CURRENT_TIMESTAMP, (SELECT COUNT(*) FROM {0}));
 

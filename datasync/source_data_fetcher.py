@@ -72,12 +72,12 @@ def fetch_source(conn, firstboot=False, rownum=None):
 
     # if it is first boot, fetch all matched data from source database, else, fetch the last day's data
     if not firstboot:
-        date_fields = ('CREATEDDATE', 'LASTMODIFIEDDATE', 'GSS_LAST_TOUCH_TIME__C')
-        date_str = datetime.date.strftime(datetime.date.today(), '%d-%m-%Y %H:%M:%S')
-        date_query_str = '{0} >= TO_DATE(\'{1}\', \'dd-mm-yyyy HH24:MI:SS\')'
-        date_query = [date_query_str.format(field, date_str) for field in date_fields]
-        date_query = ' OR '.join(date_query)
-        date_str = ' AND ({0})'.format(date_query)
+        # date_fields = ('CREATEDDATE', 'LASTMODIFIEDDATE', 'GSS_LAST_TOUCH_TIME__C')
+        date_str = datetime.date.strftime(datetime.date.today() - datetime.timedelta(days=5), '%d-%m-%Y %H:%M:%S')
+        date_query = 'LASTMODIFIEDDATE >= TO_DATE(\'%s\', \'dd-mm-yyyy HH24:MI:SS\')' % date_str
+        # date_query = [date_query_str.format(field, date_str) for field in date_fields]
+        #date_query = ' OR '.join(date_query)
+        date_str = ' AND (%s)' % date_query
         # date_str = ' and CREATEDDATE >= TO_DATE(\'{0}\', \'dd-mm-yyyy HH24:MI:SS\') '.format(date_str)
     else:
         date_str = ''
@@ -94,7 +94,6 @@ def fetch_source(conn, firstboot=False, rownum=None):
 
 
 def dump_data(cur):
-    now = time.time()
     print 'Dumping source data...'
 
     results = cur.fetchmany()
@@ -141,7 +140,7 @@ def check_firstboot(conn):
     is_firstboot = cur.rowcount == 0
     cur.close()
 
-    print('First boot status: %s' % is_firstboot)
+    print 'First boot status: %s' % is_firstboot
 
     return is_firstboot
 
@@ -168,7 +167,7 @@ def main(rownum = None):
 
     csv_fd = csv_import(params)
 
-    print('Login to target database %s' % srtracker_conf.pg_config['host'])
+    print 'Login to target database %s' % srtracker_conf.pg_config['host']
     apply_data(postgconn, csv_fd)
 
     postgconn.close()
